@@ -7,6 +7,7 @@ import com.revature.Service.UserService;
 import com.revature.exception.AccountSQLException;
 import com.revature.exception.LoginFail;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -83,7 +84,7 @@ public  User getUserCredentials(){
                 createAccount(controlMap);
                 break;
             case "2":
-                //                    accountController.viewAccounts();
+               viewAccounts(controlMap);
 
 
 
@@ -93,16 +94,31 @@ public  User getUserCredentials(){
     }
     public void createAccount(Map<String,String> controlMap){
 
+//        Scanner scanner = new Scanner(System.in);
+//        System.out.print("Enter account type (e.g., savings, checking): ");
+//        String accountType = scanner.nextLine();
+          String accountType  ="Checking";
 
+        String accountHolder = controlMap.get("User");
 
-        // Assuming accountHolder is obtained from the currently logged-in user
-        String accountHolder = controlMap.get("User"); // Replace with actual logic
-
-        Account account = new Account(0, 0, "Checking", accountHolder);
+        Account account = new Account(0, 0, accountType, accountHolder);
         Account createdAccount = accountService.createAccount(account);
         System.out.println("Account created successfully. Account ID: " + createdAccount.getAccountId());
     }
 
+    public void viewAccounts(Map<String,String> controlMap){
+        String accountHolder = controlMap.get("User");
+        List<Account> accounts = accountService.usersAccounts(accountHolder);
+        if (accounts.isEmpty()){
+            System.out.println("No Accounts Available");
+        }
+        else{
+            for(Account acct:accounts){
+                System.out.println(acct);
+            }
+        }
+
+    }
 
 
 

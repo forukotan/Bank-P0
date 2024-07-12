@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class SQliteAccountDAO implements AccountDAO {
@@ -49,7 +50,31 @@ public class SQliteAccountDAO implements AccountDAO {
 
     @Override
     public List<Account> getAccountByUser(String username) {
-        return null;
+        String sql = "select * from account where account_holder =?";
+        try (Connection connection= DatabaseConnector.createConnection()){
+          PreparedStatement preparedStatement= connection.prepareStatement(sql);
+          preparedStatement.setString(1, username);
+          ResultSet rs = preparedStatement.executeQuery();
+          List<Account> accounts = new ArrayList<>();
+          while (rs.next()){
+              Account accountRecord = new Account(
+                rs.getInt("account_Id"),
+                rs.getInt("balance")  ,
+                rs.getString("account_type") ,
+                rs.getString("account_holder")
+              );
+              accounts.add(accountRecord);
+          }
+            return accounts;
+        }catch (SQLException exception)
+        {
+            try {
+                throw new AccountSQLException(exception.getMessage());
+            } catch (AccountSQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
     }
 
     @Override

@@ -11,9 +11,9 @@ how do i not have to manually type the username when making account
 
 //to do section
 /*
-TODO:make the login change menus:in works
-TODO:make an account model:done
-Todo:figure out when you make an account how to link it to the persisting user in sql and java:in the works
+TODOne:make the login change menus:in works
+TODOne:make an account model
+Todone:figure out when you make an account how to link it to the persisting user in sql and java:in the works
 todo:figure out the sql for account to defualt on the values we need: done
  */
 
