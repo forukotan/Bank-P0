@@ -17,8 +17,9 @@ public class User implements Serializable {
     public User(){}
 
     public User(String username,String password){
+        // i had this.username and that replaced the value of user name in newcredentials
         this.username = username;
-        this.username =password;
+        this.password =password;
     }
 
     public String getUsername() {

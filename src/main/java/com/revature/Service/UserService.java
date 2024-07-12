@@ -40,8 +40,8 @@ public class UserService {
 
     }
     private boolean  checkUserNamePasswordLength(User newUserCredentials){
-        boolean usernameValidLength = newUserCredentials.getUsername().length() <=30;
-        boolean passwordValidLength = newUserCredentials.getPassword().length() <=30;
+        boolean usernameValidLength = newUserCredentials.getUsername().length() <=30 && !newUserCredentials.getUsername().isEmpty();
+        boolean passwordValidLength = newUserCredentials.getPassword().length() <=30 && !newUserCredentials.getPassword().isEmpty();
         return passwordValidLength && usernameValidLength;
     }
 
@@ -60,3 +60,4 @@ public class UserService {
 
 
 }
+

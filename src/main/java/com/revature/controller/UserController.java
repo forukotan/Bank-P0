@@ -1,7 +1,10 @@
 package com.revature.controller;
 
+import com.revature.Entity.Account;
 import com.revature.Entity.User;
+import com.revature.Service.AccountService;
 import com.revature.Service.UserService;
+import com.revature.exception.AccountSQLException;
 import com.revature.exception.LoginFail;
 
 import java.util.Map;
@@ -11,9 +14,13 @@ import java.util.Scanner;
 public class UserController {
     private Scanner scanner;
     private UserService userService;
-    public UserController(Scanner scanner, UserService userService){
+    private AccountService accountService;
+
+    public UserController(Scanner scanner, UserService userService,AccountService accountService){
         this.scanner = scanner;
         this.userService = userService;
+        this.accountService = accountService;
+
     }
 public void promptUserForService(Map<String,String> controlMap){
 
@@ -22,21 +29,20 @@ public void promptUserForService(Map<String,String> controlMap){
     System.out.println("2. Login");
     System.out.println("0. quit");
     try{
-        int userActionIndicated = Integer.parseInt(scanner.nextLine());
-        if (userActionIndicated == 1) {
-            registerNewUser();
-            // System.out.println("Username: " + newUsername + "Password: " + newPassword);
+        String userActionIndicated = scanner.nextLine();
+        switch (userActionIndicated) {
+            case "1":
+                registerNewUser();
+                break;
+            case "2":
+                controlMap.put("User", userLogin().getUsername());
+                break;
+            case "q":
+                System.out.println("Goodbye!");
+                controlMap.put("Continue Loop", "false");
         }
-        else if (userActionIndicated == 2){
-          controlMap.put("User",userLogin().toString()) ;
-        }
-
-        else if(userActionIndicated==0) {
-            System.out.println("Goodbye");
-            controlMap.put("Continue Loop", "false");
-
-        }
-    }catch(LoginFail exception){
+        // this exception triggers if the user enters invalid credentials
+    } catch(LoginFail exception){
         System.out.println(exception.getMessage());
     }
 
@@ -53,11 +59,54 @@ public User userLogin(){
         return userService.checkLoginCredentials(getUserCredentials());
     }
 public  User getUserCredentials(){
-    System.out.println("Please put username");
-    String newUsername = scanner.nextLine();
-    System.out.println("Please enter a password");
-    String newPassword = scanner.nextLine();
-    return new User (newUsername,newPassword);
+    String newUsername;
+    String newPassword;
+    // user needs to provide a username and password
+    System.out.print("Please enter a username: ");
+    newUsername = scanner.nextLine();
+    System.out.print("Please enter a password: ");
+    newPassword = scanner.nextLine();
+    return new User(newUsername, newPassword);
+    }
+    public void loginMenu(Map<String,String> controlMap){
+        System.out.println("please select what you want to do");
+        System.out.println("1. Open a checkings account");
+        System.out.println("2.View account details");
+       /*
+       make a for each loop for all their accounts and display all the info on a new line each
+       then makeoption to deposit, withdraw,transfer-which uses withdraw and deposit, and logout feature
+        */
+        System.out.println("3. Close an account");
+        String userSelection = scanner.nextLine();
+        switch (userSelection) {
+            case "1":
+                createAccount(controlMap);
+                break;
+            case "2":
+                //                    accountController.viewAccounts();
+
+
+
+                break;
+            case "3":
+        }
+    }
+    public void createAccount(Map<String,String> controlMap){
+
+
+
+        // Assuming accountHolder is obtained from the currently logged-in user
+        String accountHolder = controlMap.get("User"); // Replace with actual logic
+
+        Account account = new Account(0, 0, "Checking", accountHolder);
+        Account createdAccount = accountService.createAccount(account);
+        System.out.println("Account created successfully. Account ID: " + createdAccount.getAccountId());
     }
 
-}
+
+
+
+
+    }
+
+
