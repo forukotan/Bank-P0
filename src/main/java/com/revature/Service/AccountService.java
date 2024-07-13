@@ -20,4 +20,9 @@ public class AccountService {
     public List<Account> usersAccounts (String username){
         return accountDAO.getAccountByUser(username);
     }
+    public void closeAccount(Account account){
+        accountDAO.closeAccount(account);
+        System.out.println(" We have closed this account and have taken all the money inside as payment your welcome");
+    }
+
 }

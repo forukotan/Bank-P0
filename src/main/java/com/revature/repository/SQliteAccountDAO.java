@@ -78,17 +78,34 @@ public class SQliteAccountDAO implements AccountDAO {
     }
 
     @Override
-    public Account deposit(int accountId, int amount) {
+    public Account deposit(int accountId, double amount) {
         return null;
     }
 
     @Override
-    public Account withdraw(int accountId, int amount) {
+    public Account withdraw(int accountId, double amount) {
         return null;
     }
 
     @Override
-    public void closeAccount(int accountId) {
+    public void closeAccount(Account account) {
+        String sql = "delete from account where account_id =? and account_holder= ? ";
+        try(Connection connection = DatabaseConnector.createConnection()) {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, account.getAccountId());
+            preparedStatement.setString(2,account.getAccountHolder());
+           int rs = preparedStatement.executeUpdate();
+            if (rs== 0) {
+                throw new SQLException("Deleting account failed, no rows affected.");
+            }
+        } catch(SQLException exception){
+            try {
+                throw new AccountSQLException(exception.getMessage());
+            } catch (AccountSQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
 
     }
 }

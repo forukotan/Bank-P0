@@ -11,9 +11,9 @@ public interface AccountDAO {
     // i think this is the only way to make an account view user specific
     List<Account> getAccountByUser(String username);
 
-    Account deposit(int accountId, int amount);
-    Account withdraw(int accountId, int amount);
-    void closeAccount(int accountId);
+    Account deposit(int accountId, double amount);
+    Account withdraw(int accountId, double amount);
+    void closeAccount(Account account);
 
 
 

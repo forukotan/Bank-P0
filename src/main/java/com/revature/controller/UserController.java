@@ -85,12 +85,12 @@ public  User getUserCredentials(){
                 break;
             case "2":
                viewAccounts(controlMap);
-
-
-
                 break;
             case "3":
+                closeAccount(controlMap);
+                break;
         }
+
     }
     public void createAccount(Map<String,String> controlMap){
 
@@ -117,6 +117,23 @@ public  User getUserCredentials(){
                 System.out.println(acct);
             }
         }
+
+    }
+
+    public void closeAccount(Map<String,String> controlMap){
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Which account are we closing today?");
+        int accountid = Integer.parseInt(scanner.nextLine());
+        String accountHolder = controlMap.get("User");
+
+
+        System.out.println("Are you sure you want to close this account? (yes/no)");
+        String confirmation = scanner.nextLine().trim().toLowerCase();
+        if (!confirmation.equals("yes")) {
+            System.out.println("Account closing canceled.");
+            return;}
+        Account account = new Account(accountid,0,"checking",accountHolder);
+        accountService.closeAccount(account);
 
     }
 
