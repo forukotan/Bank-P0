@@ -79,15 +79,73 @@ public class SQliteAccountDAO implements AccountDAO {
 
     @Override
     public Account deposit(int accountId, double amount) {
+        // cant deposit negative money
+
+        String sql = "update account set balance = balance + ? where account_id =?";
+        try (Connection connection = DatabaseConnector.createConnection()){
+                PreparedStatement preparedStatement = connection.prepareStatement(sql);
+                preparedStatement.setDouble(1,amount);
+                preparedStatement.setInt(2,accountId);
+
+                int rs = preparedStatement.executeUpdate();
+
+        }
+        catch (SQLException exception)
+        {
+            try {
+                throw new AccountSQLException(exception.getMessage());
+            } catch (AccountSQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+
         return null;
     }
 
     @Override
     public Account withdraw(int accountId, double amount) {
+        String balanceCheck ="SELECT balance FROM account WHERE account_id = ?";
+        String sql = "update account set balance = balance - ? where account_id =?";
+        try (Connection connection = DatabaseConnector.createConnection()){
+
+            PreparedStatement checkBalanceStmt = connection.prepareStatement(balanceCheck);
+            checkBalanceStmt.setInt(1, accountId);
+            ResultSet rs2 = checkBalanceStmt.executeQuery();
+
+            if (rs2.next()) {
+                double currentBalance = rs2.getDouble("balance");
+
+
+                if (amount > currentBalance) {
+                    throw new SQLException("insufficient funds. withdrawal amount exceeds current balance.");
+                }
+
+
+
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setDouble(1,amount);
+            preparedStatement.setInt(2,accountId);
+
+            int rs = preparedStatement.executeUpdate();
+
+        }
+//        catch (SQLException exception)
+//        {
+//            try {
+//                throw new AccountSQLException(exception.getMessage());
+//            } catch (AccountSQLException e) {
+//                throw new RuntimeException(e);
+//            }
+//        }
+
         return null;
+    } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    @Override
+        @Override
     public void closeAccount(Account account) {
         String sql = "delete from account where account_id =? and account_holder= ? ";
         try(Connection connection = DatabaseConnector.createConnection()) {

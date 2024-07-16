@@ -3,6 +3,7 @@ package com.revature;
 import com.revature.Service.AccountService;
 import com.revature.Service.UserService;
 import com.revature.controller.UserController;
+import com.revature.exception.AccountSQLException;
 import com.revature.repository.AccountDAO;
 import com.revature.repository.SQliteAccountDAO;
 import com.revature.repository.SQliteDao;
@@ -22,7 +23,7 @@ public class Main {
         - and let the user know the results
      */
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws AccountSQLException {
         try (Scanner scanner = new Scanner(System.in)) {
             UserDao userDao = new SQliteDao();
             UserService userService = new UserService(userDao);

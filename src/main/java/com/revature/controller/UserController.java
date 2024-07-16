@@ -69,15 +69,12 @@ public  User getUserCredentials(){
     newPassword = scanner.nextLine();
     return new User(newUsername, newPassword);
     }
-    public void loginMenu(Map<String,String> controlMap){
+    public void loginMenu(Map<String,String> controlMap) throws AccountSQLException {
         System.out.println("please select what you want to do");
         System.out.println("1. Open a checkings account");
         System.out.println("2.View account details");
-       /*
-       make a for each loop for all their accounts and display all the info on a new line each
-       then makeoption to deposit, withdraw,transfer-which uses withdraw and deposit, and logout feature
-        */
-        System.out.println("3. Close an account");
+        System.out.println("3. deposit/withdraw");
+        System.out.println("4. Close an account");
         String userSelection = scanner.nextLine();
         switch (userSelection) {
             case "1":
@@ -87,6 +84,21 @@ public  User getUserCredentials(){
                viewAccounts(controlMap);
                 break;
             case "3":
+                System.out.println("type Deposit or withdraw");
+                String depositOrWithdraw =scanner.nextLine();
+                if(depositOrWithdraw.toLowerCase().equals("deposit"))
+                {
+                    deposit();
+                } else if (depositOrWithdraw.toLowerCase().equals("withdraw")) {
+                    withdraw();
+                }
+                else{
+                    System.out.println("um... either you can't spell or that wasn't an option");
+                }
+
+
+                break;
+            case "4":
                 closeAccount(controlMap);
                 break;
         }
@@ -134,6 +146,31 @@ public  User getUserCredentials(){
             return;}
         Account account = new Account(accountid,0,"checking",accountHolder);
         accountService.closeAccount(account);
+
+    }
+
+    public void deposit(){
+        System.out.println("Which account are we looking ");
+        int account = Integer.parseInt(scanner.nextLine());
+        System.out.println("how much would you like to deposit?");
+        double amount = scanner.nextDouble();
+
+        accountService.deposit(account,amount);
+
+    }
+
+    public void withdraw() throws AccountSQLException {
+        System.out.println("Which account are we looking ");
+        int accountId = Integer.parseInt(scanner.nextLine());
+        System.out.println("how much would you like to withdraw?");
+        double amount = scanner.nextDouble();
+
+        try {
+            accountService.withdraw(accountId, amount);
+            System.out.println("Withdrawal successful.");
+        } catch (AccountSQLException e) {
+            System.out.println("Failed to withdraw: " + e.getMessage());
+        }
 
     }
 
