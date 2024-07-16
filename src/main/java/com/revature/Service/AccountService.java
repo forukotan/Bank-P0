@@ -4,6 +4,7 @@ import com.revature.Entity.Account;
 import com.revature.exception.AccountSQLException;
 import com.revature.repository.AccountDAO;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public class AccountService {
@@ -31,7 +32,7 @@ public class AccountService {
         accountDAO.deposit(accountId, amount);
     }
 
-    public void withdraw(int accountId, double amount) throws AccountSQLException {
+    public void withdraw(int accountId, double amount) throws SQLException {
         accountDAO.withdraw(accountId, amount);
     }
 }

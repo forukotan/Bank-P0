@@ -7,6 +7,7 @@ import com.revature.Service.UserService;
 import com.revature.exception.AccountSQLException;
 import com.revature.exception.LoginFail;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -159,7 +160,7 @@ public  User getUserCredentials(){
 
     }
 
-    public void withdraw() throws AccountSQLException {
+    public void withdraw()  {
         System.out.println("Which account are we looking ");
         int accountId = Integer.parseInt(scanner.nextLine());
         System.out.println("how much would you like to withdraw?");
@@ -168,7 +169,7 @@ public  User getUserCredentials(){
         try {
             accountService.withdraw(accountId, amount);
             System.out.println("Withdrawal successful.");
-        } catch (AccountSQLException e) {
+        } catch (SQLException e) {
             System.out.println("Failed to withdraw: " + e.getMessage());
         }
 

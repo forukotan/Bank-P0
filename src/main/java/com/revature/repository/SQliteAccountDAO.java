@@ -104,7 +104,7 @@ public class SQliteAccountDAO implements AccountDAO {
     }
 
     @Override
-    public Account withdraw(int accountId, double amount) {
+    public Account withdraw(int accountId, double amount) throws SQLException {
         String balanceCheck ="SELECT balance FROM account WHERE account_id = ?";
         String sql = "update account set balance = balance - ? where account_id =?";
         try (Connection connection = DatabaseConnector.createConnection()){
@@ -140,9 +140,7 @@ public class SQliteAccountDAO implements AccountDAO {
 //        }
 
         return null;
-    } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+    }
     }
 
         @Override

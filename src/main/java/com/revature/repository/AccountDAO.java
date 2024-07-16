@@ -2,6 +2,7 @@ package com.revature.repository;
 
 import com.revature.Entity.Account;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public interface AccountDAO {
@@ -12,7 +13,7 @@ public interface AccountDAO {
     List<Account> getAccountByUser(String username);
 
     Account deposit(int accountId, double amount);
-    Account withdraw(int accountId, double amount);
+    Account withdraw(int accountId, double amount) throws SQLException;
     void closeAccount(Account account);
 
 

@@ -18,4 +18,4 @@ account_holder text,
 foreign key (account_holder ) references user(username)
 );
 
-insert into account(account_holder) values('admin');
+insert into account(account_holder, account_Type) values('user', 'saving');
